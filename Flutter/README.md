@@ -2,7 +2,7 @@
 
 
 
-### 기본 화면 꾸미기 (SplashScreen 파일)
+### 기본 화면 꾸미기 (splash_screen)
 
 
 
