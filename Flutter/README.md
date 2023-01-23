@@ -38,5 +38,7 @@
 
 또한 Timer를 통하여 0.5초마다 이미지가 자동으로 변경되도록 만들었다.
 
+[image.webm](https://user-images.githubusercontent.com/56026214/213974556-d6c02e7e-d207-411b-8836-bc056fec21c1.webm)
+
 
 
