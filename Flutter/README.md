@@ -22,5 +22,4 @@
 
 웹페이지를 WebView를 이용하여 보여주고 앱바와 앱바에 있는 actions를 이용하여 홈 버튼, 앞으로 가기, 뒤로 가기, 버튼을 사용하였다.
 
-
-
+[webapp.webm](https://user-images.githubusercontent.com/56026214/213966390-543243c9-44d3-4883-b597-289b3be2bc8e.webm)
