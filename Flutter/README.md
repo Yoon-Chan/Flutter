@@ -62,6 +62,7 @@
 
 
 
+[UandI.webm](https://user-images.githubusercontent.com/56026214/214497986-466e39af-16c4-4408-9c76-cb69c6c0e1d6.webm)
 
 
 ---
@@ -106,11 +107,15 @@
 
 | 시작 화면 | 로고를 눌렀을 때 | 비디오를 선택했을 때 |
 | :-------: | :--------------: | :------------------: |
-|           |                  |                      |
+|   ![1](https://user-images.githubusercontent.com/56026214/214498024-a3e10ee5-9efe-47ec-bcb9-b9bd590956a6.png)|          ![2](https://user-images.githubusercontent.com/56026214/214498034-17a913eb-316f-42a9-a8fd-b24249a7a1b0.png)|            ![3](https://user-images.githubusercontent.com/56026214/214498050-0f9c4e60-e318-445d-bcb0-9f1bd2079649.png)|
 
 
 
 | 화면을 회전 했을 때 | 화면 터치했을 때 | 시작 누를 때 |
 | :-----------------: | :--------------: | :----------: |
-|                     |                  |              |
+|         ![6](https://user-images.githubusercontent.com/56026214/214498064-aefc3b92-0216-480c-9ef1-4bdbd2ac193b.png)|          ![4](https://user-images.githubusercontent.com/56026214/214498081-658b2adf-3cf6-4d40-ab45-b411856cce34.png)|  ![5](https://user-images.githubusercontent.com/56026214/214498093-46971a4b-731f-4fc4-8ad4-64950fee8660.png)|
 
+
+|영상1| 영상2 | 영상 3|
+|:--:|:--:|:--:|
+| [video1.webm](https://user-images.githubusercontent.com/56026214/214498205-bc5abd93-ada8-4297-9d8f-6ffac1a45528.webm)| [video2.webm](https://user-images.githubusercontent.com/56026214/214498221-20facc04-cc7c-4568-bd1b-1462dba958c4.webm)|  [video3.webm](https://userimages.githubusercontent.com/56026214/214498237-86c7acea-387f-4677-86a7-9359a4dc3a05.webm)|
