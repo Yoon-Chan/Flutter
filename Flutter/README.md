@@ -84,6 +84,14 @@
 설정 탭에서는 민감도를 조정할 수 있다. 민감도를 높일수록 작은 흔들림에도 감지가 되도록 했다.
 
 
+| 시작 화면| 설정 | 흔들기 결과 |
+| :--: | :--: | :--: |
+|![Screenshot_20230125_155154](https://user-images.githubusercontent.com/56026214/214499935-d969d69f-197b-4c26-a7e1-cd6a120cdf55.jpg)|![Screenshot_20230125_155200](https://user-images.githubusercontent.com/56026214/214499948-909373de-53d7-450e-9611-50f8d43a72cd.jpg)| ![Screenshot_20230125_155255](https://user-images.githubusercontent.com/56026214/214499963-506d7b29-3793-43c5-821f-7daaa4e5349c.jpg)|
+
++ #### 영상
+
+https://user-images.githubusercontent.com/56026214/214499992-b58285e5-b794-46b8-9771-8e6476416b3d.mp4
+
 
 
 
