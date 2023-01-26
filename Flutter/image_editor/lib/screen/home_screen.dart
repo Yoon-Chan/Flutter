@@ -1,11 +1,14 @@
 import 'dart:io';
-
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:image_editor/component/emoticon_sticker.dart';
 import 'package:image_editor/component/footer.dart';
 import 'package:image_editor/component/main_app_bar.dart';
 import 'package:image_editor/component/sticker_model.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,6 +23,9 @@ class _HomeScreen extends State<HomeScreen> {
   XFile? image; //선택한 이미지를 저장할 변수
   Set<StickerModel> stickers = {}; //화면에 추가된 스티커를 저장할 변수
   String? selectedId; // 현재 선택된 스티커의 ID
+
+  GlobalKey imgKey = GlobalKey(); //이미지로 전환할 위젯에 입력해줄 키값
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,33 +75,56 @@ class _HomeScreen extends State<HomeScreen> {
     });
   }
 
-  void onSaveImage() {}
+  void onSaveImage() async {
+    RenderRepaintBoundary boundary = imgKey.currentContext!
+        .findRenderObject() as RenderRepaintBoundary;
+
+    ui.Image image = await boundary.toImage();
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    //byte data 형태로 형태 변경
+
+    Uint8List pngBytes = byteData!.buffer.asUint8List();
+    //Uint8List 형태로 형태 변경
+
+
+    //이미지 저장하기
+    await ImageGallerySaver.saveImage(pngBytes, quality:  100);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("저장되었습니다."))
+    );
+  }
 
   Widget renderBody() {
     if (image != null) {
       // Stack 크기의 최대 크기만큼 차지하기
-      return Positioned.fill(
+      return RepaintBoundary(
+        key: imgKey,
+        child: Positioned.fill(
           //위젯 확대 및 좌우 이동을 가능하게 하는 위젯
-          child: InteractiveViewer(
-              child: Stack(
-        fit: StackFit.expand, //크기 최대로 늘려주기
-        children: [
-          Image.file(
-            File(image!.path),
-            fit: BoxFit.cover,
-          ),
-          ...stickers.map((sticker) => Center(
-                child: EmoticonSticker(
-                  key: ObjectKey(sticker.id),
-                  onTransform: (){
-                    onTransform(sticker.id);
-                  },
-                  imgPath: sticker.imgPath,
-                  isSelected: selectedId == sticker.id,
-                ),
-              ))
-        ],
-      )));
+            child: InteractiveViewer(
+                child: Stack(
+                  fit: StackFit.expand, //크기 최대로 늘려주기
+                  children: [
+                    Image.file(
+                      File(image!.path),
+                      fit: BoxFit.cover,
+                    ),
+                    ...stickers.map((sticker) => Center(
+                      child: EmoticonSticker(
+                        key: ObjectKey(sticker.id),
+                        onTransform: (){
+                          onTransform(sticker.id);
+                        },
+                        imgPath: sticker.imgPath,
+                        isSelected: selectedId == sticker.id,
+                      ),
+                    ))
+                  ],
+                )
+            )
+        ),
+      );
     } else {
       //이미지 선택이 안 된 경우 이미지 선택 버튼 표시
       return Center(
