@@ -32,14 +32,14 @@ class MainAppBar extends StatelessWidget {
 
           ),
           IconButton(
-            onPressed: onSaveImage,
+            onPressed: onDeleteItem,
             icon: Icon(
               Icons.delete_forever_outlined,
               color: Colors.grey[700],),
 
           ),
           IconButton(
-            onPressed: onDeleteItem,
+            onPressed: onSaveImage,
             icon: Icon(
               Icons.save,
               color: Colors.grey[700],),
