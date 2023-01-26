@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_editor/component/footer.dart';
 import 'package:image_editor/component/main_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -41,6 +42,17 @@ class _HomeScreen extends State<HomeScreen>{
                 onDeleteItem: onDeleteItem,
                 onSaveImage: onSaveImage,
               )),
+
+          //Footer 위치하기
+          if(image != null)
+            Positioned(
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: Footer(
+                  onEmotionTap: onEmotionTap,
+                ))
+
         ],
 
       ),
@@ -86,6 +98,10 @@ class _HomeScreen extends State<HomeScreen>{
         ),
       );
     }
+  }
+
+  void onEmotionTap(int index){
+
   }
 
 }
