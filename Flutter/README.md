@@ -151,14 +151,14 @@ https://user-images.githubusercontent.com/56026214/214499992-b58285e5-b794-46b8-
 
 
 
-+ #### 영상1 - 실제 기기
++ #### 영상1 - 에뮬레이터
 
   
 [1.webm](https://user-images.githubusercontent.com/56026214/214742930-c227944b-5b99-49f5-a4d2-dc1c5bd23c7d.webm)
 
   
 
-+ #### 영상 2 - 에뮬레이터 
++ #### 영상 2 - 실제 기기 
 
 
 
