@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class HomeScreen extends StatelessWidget {
   static final LatLng companyLatLng = LatLng(37.5233273, 126.921252);
   static final Marker marker =
-      Marker(markerId: MarkerId("company"), position: companyLatLng);
+  Marker(markerId: MarkerId("company"), position: companyLatLng);
   static final Circle circle = Circle(
     circleId: CircleId("choolCheckCircle"),
     center: companyLatLng,
@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     strokeColor: Colors.blue,
     strokeWidth: 1,
   );
-  
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -46,6 +46,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                       markers: Set.from([marker]),
                       circles: Set.from([circle]),
+
+                      // 내 위치 지도에 보여주기
+                      myLocationEnabled: true,
                     ),
                   ),
                   Expanded(
@@ -59,7 +62,39 @@ class HomeScreen extends StatelessWidget {
                             size: 50,
                           ),
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final curPosition = await Geolocator
+                                  .getCurrentPosition(); //현재 위치
+
+                              final distance = Geolocator.distanceBetween(
+                                  curPosition.latitude, curPosition.longitude,
+                                  companyLatLng.latitude,
+                                  companyLatLng.longitude);
+
+                              bool check = distance <
+                                  100; // 100미터 이내에 있으면 출근 가능
+
+                              showDialog(context: context, builder: (_) {
+                                return AlertDialog(
+                                  title: Text("출근하기"),
+
+                                  //출근 가능 여부에 따라 다른 메시지 제공
+                                  content: Text(
+                                      check ? '출근을 하시겠습니까?' : '출근 할 수 없는 위치입니다.'
+                                  ),
+                                  actions: [
+                                    TextButton(onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    }, child: Text('취소')),
+
+                                    if(check)
+                                      TextButton(onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      }, child: Text("출근하기")),
+                                  ],
+                                );
+                              });
+                            },
                             child: Text('출근하기!'),
                           ),
                         ],
