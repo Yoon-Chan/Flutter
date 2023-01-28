@@ -232,13 +232,13 @@ ImagePicker와 InteractiveViewer 위젯, 그리 GestureDetector를 이용하여 
 
 
 
-| 시작 화면 | 갤러리 화면 | 이미지가 선택한 화면 |
-| --------- | ----------- | -------------------- |
-|           |             |                      |
+| 시작 화면 | 갤러리 화면 | 이미지가 선택한 화면 | 이미지 꾸미기|
+| --------- | ----------- | -------------------- |-------------|
+|    ![1](https://user-images.githubusercontent.com/56026214/215262920-16291ced-b97c-47b3-a620-9c8dac3a12b3.png)|        ![2](https://user-images.githubusercontent.com/56026214/215262924-501d630b-e6f0-4638-a2b4-49be67a44c9d.png)|             ![3](https://user-images.githubusercontent.com/56026214/215262928-035c3e48-8e4d-4123-9ed1-5f4e8b756c0e.png)          | ![4](https://user-images.githubusercontent.com/56026214/215262944-f9fef139-533e-42af-9986-605d41c01f86.png)| 
 
-| 삭제 탭 누른 경우 | 저장된 사진 | 저장된 이미지 확인 |
+| 삭제 탭 누른 경우 | 저장하 | 저장된 이미지 확인 |
 | ----------------- | ----------- | ------------------ |
-|                   |             |                    |
+|         ![5](https://user-images.githubusercontent.com/56026214/215262953-a525c00d-d4f3-4c6a-bbe7-3f1f3fd58557.png)|        ![6](https://user-images.githubusercontent.com/56026214/215262964-c37fd042-c955-4455-b179-dcf93026ef13.png)|       ![7](https://user-images.githubusercontent.com/56026214/215262970-fe28d7f2-2d6b-4d9a-993f-aaafe5da0338.png)|
 
 
 
@@ -253,6 +253,10 @@ ImagePicker와 InteractiveViewer 위젯, 그리 GestureDetector를 이용하여 
 + 실행 영상
 
 
+
+
+
+https://user-images.githubusercontent.com/56026214/215262973-6e1cc0dc-6d34-4287-8760-5c4f8c599623.mp4
 
 
 
