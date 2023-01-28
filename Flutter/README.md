@@ -262,3 +262,33 @@ https://user-images.githubusercontent.com/56026214/215262973-6e1cc0dc-6d34-4287-
 
 
 
+-----
+
+### 유튜브 기본 구현
+
+
+
+구글 유튜브 API를 사용해서 유튜브 채널의 영상들을 불러와 보여주는 앱을 만든다.
+
+
+
+REST Api의 Dio를 사용하고 구글 유튜브 API의 데이터를 Json 형식으로 받아오고 받아온 유튜브 영상들을 보여주도록 하였다.
+
+
+
+구글 유튜브 Api 기능인 YoutubePlayerController, YoutubePlayerFlags, YoutubePlayer를 이용하여 유튜브 데이터를 얻어왔다.
+
+
+
+시작 하면 설정한 채널의  유튜브의 영상들이 나온다. ListView를 이용하여 스와이프하면 해당 영상들이 나온다.
+
+위로 당기게 되면 새로고침 기능 실행되도록 한다. 새로고침 기능은 RefreshIndicator기능을 이용하여 구현하였다.
+
+
+
+
+
++ 실행 영상
+
+
+
