@@ -292,3 +292,7 @@ REST Api의 Dio를 사용하고 구글 유튜브 API의 데이터를 Json 형식
 
 
 
+https://user-images.githubusercontent.com/56026214/215263992-c21437ec-b7de-47e9-9dfa-078cf5cc40a7.mp4
+
+
+
