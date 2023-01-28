@@ -191,7 +191,7 @@ https://user-images.githubusercontent.com/56026214/214742977-a378a4fc-4917-4971-
 
 | 시작 화면 | 메인 화면 | 회사 바께 출근하기 버튼 | 회사 내에 있는 경우 |
 | :-------: | :-------: | :---------------------: | :-----------------: |
-|           |           |                         |                     |
+|      ![1](https://user-images.githubusercontent.com/56026214/215262108-b45a924d-9a7f-4863-8ee9-81814f4cf214.png)|     ![2](https://user-images.githubusercontent.com/56026214/215262113-3be6c481-680e-4944-89fd-3f1b7db2cac1.png)|![3](https://user-images.githubusercontent.com/56026214/215262117-923ac749-1247-42b4-8f9f-804ae8bcaf3a.png)|![4](https://user-images.githubusercontent.com/56026214/215262122-62e3fd18-473a-403a-9b8c-9d611d99f08d.png)|
 
 
 
@@ -206,3 +206,11 @@ https://user-images.githubusercontent.com/56026214/214742977-a378a4fc-4917-4971-
 구글 지도에 보이는 버튼은 전부 사용이 가능하며 +,- 버튼을 누르면 지도가 확대/축소가 되고, 오른쪽 위 버튼을 누르면 현재 위치로 가게 된다.
 
 출근하기 버튼을 눌러도 아무 기능이 없다. (이후 구현 x)
+
++ 실행 영상
+
+
+https://user-images.githubusercontent.com/56026214/215262137-9d7fb626-bfaa-4eef-a084-8d432fdf4cd0.mp4
+
+
+
