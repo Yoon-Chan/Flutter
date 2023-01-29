@@ -1,8 +1,8 @@
-import 'dart:convert';
 
 import 'package:cf_tube/component/api.dart';
 import 'package:cf_tube/model/video_model.dart';
 import 'package:dio/dio.dart';
+
 
 class YoutubeRepository {
   static Future<List<VideoModel>> getVideo() async {
@@ -27,9 +27,10 @@ class YoutubeRepository {
         .map<VideoModel>(
           (item) => VideoModel(
             id: item['id']['videoId'],
-            title: item['snippet']['title'],
+            title: item['snippet']['title'].toString(),
           ),
         )
         .toList();
   }
 }
+
