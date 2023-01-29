@@ -1,5 +1,6 @@
 import 'package:calendar_scheduler/component/main_calendar.dart';
 import 'package:calendar_scheduler/const/schedule_card.dart';
+import 'package:calendar_scheduler/const/today_banner.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -31,7 +32,14 @@ class _HomeScreen extends State<HomeScreen> {
             onDaySelected: onDaySelected,
           ),
           SizedBox(
-            height: 10,
+            height: 8,
+          ),
+          TodayBanner(
+            selectedDate: selectedDate,
+            count: 0,
+          ),
+          SizedBox(
+            height: 8,
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.0),
