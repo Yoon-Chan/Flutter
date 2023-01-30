@@ -6,11 +6,14 @@ import 'package:flutter/services.dart';
 class CustomTextField extends StatelessWidget {
   final String label;
   final bool isTime; // 시간 선택하는 텍스트 필드인지 여부
-  
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> validator;
 
   const CustomTextField({
     required this.label,
     required this.isTime,
+    required this.onSaved,
+    required this.validator,
   });
 
   @override
@@ -29,6 +32,8 @@ class CustomTextField extends StatelessWidget {
         Expanded(
             flex: isTime? 0 : 1,
             child: TextFormField(
+              onSaved: onSaved,
+              validator: validator,
               cursorColor: Colors.grey,
               maxLines: isTime ? 1 : null,
               expands: !isTime, //시간 관련 텍스트 필드는 공간 최대 차지

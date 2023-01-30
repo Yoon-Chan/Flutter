@@ -48,6 +48,8 @@ dependencies:
   uuid: ^3.0.7
   drift_dev: ^2.4.1
   build_runner: ^2.3.3
+  firebase_core: 2.2.0
+  cloud_firestore: 4.0.5
 
 dev_dependencies:
   flutter_test:
