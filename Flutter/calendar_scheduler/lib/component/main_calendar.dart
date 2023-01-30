@@ -16,6 +16,9 @@ class MainCalendar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
+      locale: 'ko_kr',
+
+
       onDaySelected: onDaySelected,
 
       // 선택 날짜 시 실행할 함수
@@ -29,6 +32,8 @@ class MainCalendar extends StatelessWidget {
       focusedDay: DateTime.now(),
       //위에는 필수 요소들
 
+      daysOfWeekHeight: 30,
+
       headerStyle: HeaderStyle(
           titleCentered: true,
           formatButtonVisible: false, // 제목 중앙에 위치하기
@@ -40,9 +45,11 @@ class MainCalendar extends StatelessWidget {
 
       calendarStyle: CalendarStyle(
           isTodayHighlighted: false,
+          cellMargin: EdgeInsets.all(5),
           defaultDecoration: BoxDecoration( //기본 날짜 스타일
             borderRadius: BorderRadius.circular(6.0),
             color: LIGHT_GREY_COLOR,
+
           ),
 
           weekendDecoration: BoxDecoration( //주말 날짜 스타일
@@ -61,6 +68,7 @@ class MainCalendar extends StatelessWidget {
           defaultTextStyle: TextStyle( //기본 글꼴
             fontWeight: FontWeight.w600,
             color: DARK_GREY_COLOR,
+            fontSize: 16.0
           ),
 
           weekendTextStyle: TextStyle( //주말 글꼴
@@ -72,6 +80,8 @@ class MainCalendar extends StatelessWidget {
             fontWeight: FontWeight.w600,
             color: PRIMARY_COLOR,
           )
+
+
       ),
 
 
