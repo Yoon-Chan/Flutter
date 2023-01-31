@@ -6,6 +6,7 @@ import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/database/drift_database.dart';
 import 'package:calendar_scheduler/model/schedule_model.dart';
 import 'package:calendar_scheduler/provider/schedule_provider.dart';
+import 'package:calendar_scheduler/screen/banner_ad_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -123,8 +124,13 @@ class _HomeScreen extends State<HomeScreen> {
                   //final schedules = a.map((e) => ScheduleModel.fromJson( json: e.data()! as Map<String, dynamic>)).toList();
                   //print(ScheduleModel.fromJson(json: a));
 
-                  return ListView.builder(
+                  return ListView.separated(
                     itemCount: schedules.length,
+
+                    separatorBuilder: (context, index) {
+                      return BannerAdWidget();
+                    },
+
                     itemBuilder: (context, index) {
                       //현재 index에 해당되는 일절
                       final schedule = schedules[index];
