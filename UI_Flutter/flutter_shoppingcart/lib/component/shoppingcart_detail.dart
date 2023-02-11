@@ -160,6 +160,7 @@ class ShoppingCartDetail extends StatelessWidget {
                 ),
                 CupertinoDialogAction(
                   child: Text("취소"),
+                  isDestructiveAction: true,
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
