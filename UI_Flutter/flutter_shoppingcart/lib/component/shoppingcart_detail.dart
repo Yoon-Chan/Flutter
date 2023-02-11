@@ -146,7 +146,28 @@ class ShoppingCartDetail extends StatelessWidget {
     return Align(
       alignment: Alignment.center,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () {
+          showCupertinoDialog(
+            context: context,
+            builder: (context) => CupertinoAlertDialog(
+              title: Text("장바구니어 담으시겠습니까?"),
+              actions: [
+                CupertinoDialogAction(
+                  child: Text("확인"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                CupertinoDialogAction(
+                  child: Text("취소"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+          );
+        },
         style: TextButton.styleFrom(
             backgroundColor: KAccentColor,
             minimumSize: Size(300, 50),
