@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding:
                     const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
                 child: FutureBuilder<List<ScheduleTableData>>(
-                    future: GetIt.I<AppDatabase>().getSchedules(),
+                    future: GetIt.I<AppDatabase>().getSchedulesOfDay(selectedDay),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
@@ -115,11 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
 
-                      final schedules = snapshot.data!;
+                      final selectedSchedules = snapshot.data!;
 
-                      final selectedSchedules = schedules
-                          .where((e) => e.date.isAtSameMomentAs(selectedDay))
-                          .toList();
 
                       return ListView.separated(
                         // itemCount: schedules.containsKey(selectedDay)

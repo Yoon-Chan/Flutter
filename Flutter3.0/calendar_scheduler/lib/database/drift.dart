@@ -26,6 +26,16 @@ class AppDatabase extends _$AppDatabase {
   //파라미터 - 업데이트나 생성할 때 Companion 사용
   Future<int> createSchedule(ScheduleTableCompanion data) => into(scheduleTable).insert(data);
 
+  //특정 날짜의 일정들을 가져오는 방법
+  Future<List<ScheduleTableData>> getSchedulesOfDay(DateTime date) {
+    //아래 3줄 코드와 같은 방식이다. ..을 이용하여 select()문의 반환값을 가져올 수 있다.
+    return (select(scheduleTable)..where((tbl) => tbl.date.equals(date))).get();
+
+      // final selectQuery = select(scheduleTable);
+      // selectQuery.where((tbl) => tbl.date.equals(date));
+      // return selectQuery.get();
+  }
+
   @override
   int get schemaVersion => 1;
 }
