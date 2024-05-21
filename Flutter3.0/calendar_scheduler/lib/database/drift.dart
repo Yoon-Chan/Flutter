@@ -20,6 +20,12 @@ part 'drift.g.dart';
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
+  Future<List<ScheduleTableData>> getSchedules() => select(scheduleTable).get();
+
+  //반환값은 생성한 값의 id 값 -> 주로 int
+  //파라미터 - 업데이트나 생성할 때 Companion 사용
+  Future<int> createSchedule(ScheduleTableCompanion data) => into(scheduleTable).insert(data);
+
   @override
   int get schemaVersion => 1;
 }
