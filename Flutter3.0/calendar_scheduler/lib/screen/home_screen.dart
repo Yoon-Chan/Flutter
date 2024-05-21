@@ -58,12 +58,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
-        onPressed: () {
-          showModalBottomSheet(
+        onPressed: () async {
+          final resp = await showModalBottomSheet<Schedules>(
               context: context,
               builder: (context) {
-                return ScheduleBottomSheet();
+                return ScheduleBottomSheet(
+                  selectedDay: selectedDay
+                );
               });
+          if(resp == null) return;
+
+          setState(() {
+            schedules =
+            { ...schedules,
+              resp.date: [
+                if(schedules.containsKey(resp.date)) ...schedules[resp.date]!,
+                resp
+              ]
+            };
+          });
         },
         child: const Icon(
           Icons.add,
