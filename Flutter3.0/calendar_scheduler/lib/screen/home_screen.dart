@@ -4,10 +4,12 @@ import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
 import 'package:calendar_scheduler/component/schedule_card.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/color.dart';
+import 'package:calendar_scheduler/database/drift.dart';
 import 'package:calendar_scheduler/model/schedule.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get_it/get_it.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -58,16 +60,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
-        onPressed: () async {
-          final resp = await showModalBottomSheet<ScheduleTable>(
+        onPressed: ()  {
+          showModalBottomSheet<ScheduleTable>(
               context: context,
               builder: (context) {
-                return ScheduleBottomSheet(
-                  selectedDay: selectedDay
-                );
+                return ScheduleBottomSheet(selectedDay: selectedDay);
               });
-          if(resp == null) return;
-
+          setState(() {});
           // setState(() {
           //   schedules =
           //   { ...schedules,
@@ -100,26 +99,51 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding:
                     const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-                child: ListView.separated(
-                  // itemCount: schedules.containsKey(selectedDay)
-                  //     ? schedules[selectedDay]!.length
-                  //     : 0,
-                  itemCount: 0,
-                  itemBuilder: (context, index) {
-                    // final selectedSchedules = schedules[selectedDay]!;
-                    // final schedule = selectedSchedules[index];
-                    return ScheduleCard(
-                        startTime: 0, //schedule.startTime,
-                        endTime: 0,//schedule.endTime,
-                        content: '',//schedule.content,
-                        color: Color(
-                          int.parse('FF123456', radix: 16),
-                        ));
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 16.0,);
-                  },
-                ),
+                child: FutureBuilder<List<ScheduleTableData>>(
+                    future: GetIt.I<AppDatabase>().getSchedules(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      }
+
+                      if (!snapshot.hasData &&
+                          snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      final schedules = snapshot.data!;
+
+                      final selectedSchedules = schedules
+                          .where((e) => e.date.isAtSameMomentAs(selectedDay))
+                          .toList();
+
+                      return ListView.separated(
+                        // itemCount: schedules.containsKey(selectedDay)
+                        //     ? schedules[selectedDay]!.length
+                        //     : 0,
+                        itemCount: selectedSchedules.length,
+                        itemBuilder: (context, index) {
+                          // final selectedSchedules = schedules[selectedDay]!;
+                          final schedule = selectedSchedules[index];
+                          return ScheduleCard(
+                              startTime: schedule.startTime,
+                              endTime: schedule.endTime,
+                              content: schedule.content,
+                              color: Color(
+                                int.parse('FF${schedule.color}', radix: 16),
+                              ));
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 16.0,
+                          );
+                        },
+                      );
+                    }),
               ),
             )
           ],
