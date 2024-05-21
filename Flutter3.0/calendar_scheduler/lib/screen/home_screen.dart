@@ -1,9 +1,11 @@
 import 'package:calendar_scheduler/component/calendar.dart';
+import 'package:calendar_scheduler/component/custom_text_field.dart';
 import 'package:calendar_scheduler/component/schedule_card.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -29,13 +31,58 @@ class _HomeScreenState extends State<HomeScreen> {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return Container(
-                  color: Colors.white,
-                  height: 400,
-                  child: Column(
-                    children: [
-                      
-                    ],
+                return SafeArea(
+                  bottom: true,
+                  child: Container(
+                    color: Colors.white,
+                    height: 400,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8.0, top: 16.0, right: 8.0),
+                      child: Column(
+                        children: [
+                          const Row(
+                            children: [
+                              Expanded(
+                                  child: CustomTextField(
+                                label: '시작 시간',
+                              )),
+                              SizedBox(
+                                width: 16.0,
+                              ),
+                              Expanded(
+                                  child: CustomTextField(
+                                label: '종료 시간',
+                              ))
+                            ],
+                          ),
+                          const SizedBox(height: 8.0),
+                          const Expanded(
+                            child: CustomTextField(
+                              label: '내용',
+                              expand: true,
+                            ),
+                          ),
+                          Row(
+                            children: categoryColors
+                                .map(
+                                  (e) => Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 32.0,
+                                      height: 32.0,
+                                      decoration: BoxDecoration(
+                                        color: Color(int.parse('FF$e', radix: 16)),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 );
               });
@@ -87,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool selectedDayPredicate(DateTime day) {
-    if (selectedDay == null) return false;
     return day.isAtSameMomentAs(selectedDay!);
   }
 }
