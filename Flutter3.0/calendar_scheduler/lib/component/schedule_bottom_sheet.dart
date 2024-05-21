@@ -120,19 +120,19 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     if(isValid){
       formKey.currentState!.save();
 
-      final schedule = Schedules(
-        id: 999,
-        startTime: startTime!,
-        endTime: endTime!,
-        content: content!,
-        color: selectedColor,
-        date: widget.selectedDay,
-        createdAt: DateTime.now()
-      );
-
-      Navigator.of(context).pop(
-        schedule
-      );
+      // final schedule = ScheduleTable(
+      //   id: 999,
+      //   startTime: startTime!,
+      //   endTime: endTime!,
+      //   content: content!,
+      //   color: selectedColor,
+      //   date: widget.selectedDay,
+      //   createdAt: DateTime.now()
+      // );
+      //
+      // Navigator.of(context).pop(
+      //   schedule
+      // );
     }
   }
 }

@@ -24,34 +24,34 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime.now().day,
   );
 
-  Map<DateTime, List<Schedules>> schedules = {
-    DateTime.utc(2024, 5, 21): [
-      Schedules(
-          id: 1,
-          startTime: 11,
-          endTime: 12,
-          content: '플러터 공부하기',
-          date: DateTime.utc(2024, 5, 21),
-          color: categoryColors[0],
-          createdAt: DateTime.now().toUtc()),
-      Schedules(
-          id: 2,
-          startTime: 14,
-          endTime: 16,
-          content: '안드로이드 공부하기',
-          date: DateTime.utc(2024, 5, 21),
-          color: categoryColors[1],
-          createdAt: DateTime.now().toUtc()),
-      Schedules(
-          id: 1,
-          startTime: 11,
-          endTime: 12,
-          content: '플러터 공부하기',
-          date: DateTime.utc(2024, 5, 21),
-          color: categoryColors[0],
-          createdAt: DateTime.now().toUtc()),
-    ]
-  };
+  // Map<DateTime, List<ScheduleTable>> schedules = {
+  //   DateTime.utc(2024, 5, 21): [
+  //     ScheduleTable(
+  //         id: 1,
+  //         startTime: 11,
+  //         endTime: 12,
+  //         content: '플러터 공부하기',
+  //         date: DateTime.utc(2024, 5, 21),
+  //         color: categoryColors[0],
+  //         createdAt: DateTime.now().toUtc()),
+  //     ScheduleTable(
+  //         id: 2,
+  //         startTime: 14,
+  //         endTime: 16,
+  //         content: '안드로이드 공부하기',
+  //         date: DateTime.utc(2024, 5, 21),
+  //         color: categoryColors[1],
+  //         createdAt: DateTime.now().toUtc()),
+  //     ScheduleTable(
+  //         id: 1,
+  //         startTime: 11,
+  //         endTime: 12,
+  //         content: '플러터 공부하기',
+  //         date: DateTime.utc(2024, 5, 21),
+  //         color: categoryColors[0],
+  //         createdAt: DateTime.now().toUtc()),
+  //   ]
+  // };
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () async {
-          final resp = await showModalBottomSheet<Schedules>(
+          final resp = await showModalBottomSheet<ScheduleTable>(
               context: context,
               builder: (context) {
                 return ScheduleBottomSheet(
@@ -68,15 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
               });
           if(resp == null) return;
 
-          setState(() {
-            schedules =
-            { ...schedules,
-              resp.date: [
-                if(schedules.containsKey(resp.date)) ...schedules[resp.date]!,
-                resp
-              ]
-            };
-          });
+          // setState(() {
+          //   schedules =
+          //   { ...schedules,
+          //     resp.date: [
+          //       if(schedules.containsKey(resp.date)) ...schedules[resp.date]!,
+          //       resp
+          //     ]
+          //   };
+          // });
         },
         child: const Icon(
           Icons.add,
@@ -101,18 +101,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding:
                     const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
                 child: ListView.separated(
-                  itemCount: schedules.containsKey(selectedDay)
-                      ? schedules[selectedDay]!.length
-                      : 0,
+                  // itemCount: schedules.containsKey(selectedDay)
+                  //     ? schedules[selectedDay]!.length
+                  //     : 0,
+                  itemCount: 0,
                   itemBuilder: (context, index) {
-                    final selectedSchedules = schedules[selectedDay]!;
-                    final schedule = selectedSchedules[index];
+                    // final selectedSchedules = schedules[selectedDay]!;
+                    // final schedule = selectedSchedules[index];
                     return ScheduleCard(
-                        startTime: schedule.startTime,
-                        endTime: schedule.endTime,
-                        content: schedule.content,
+                        startTime: 0, //schedule.startTime,
+                        endTime: 0,//schedule.endTime,
+                        content: '',//schedule.content,
                         color: Color(
-                          int.parse('FF${schedule.color}', radix: 16),
+                          int.parse('FF123456', radix: 16),
                         ));
                   },
                   separatorBuilder: (context, index) {
