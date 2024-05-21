@@ -4,6 +4,7 @@ import 'package:calendar_scheduler/component/schedule_bottom_sheet.dart';
 import 'package:calendar_scheduler/component/schedule_card.dart';
 import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/color.dart';
+import 'package:calendar_scheduler/model/schedule.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +23,35 @@ class _HomeScreenState extends State<HomeScreen> {
     DateTime.now().month,
     DateTime.now().day,
   );
+
+  Map<DateTime, List<Schedules>> schedules = {
+    DateTime.utc(2024, 5, 21): [
+      Schedules(
+          id: 1,
+          startTime: 11,
+          endTime: 12,
+          content: '플러터 공부하기',
+          date: DateTime.utc(2024, 5, 21),
+          color: categoryColors[0],
+          createdAt: DateTime.now().toUtc()),
+      Schedules(
+          id: 2,
+          startTime: 14,
+          endTime: 16,
+          content: '안드로이드 공부하기',
+          date: DateTime.utc(2024, 5, 21),
+          color: categoryColors[1],
+          createdAt: DateTime.now().toUtc()),
+      Schedules(
+          id: 1,
+          startTime: 11,
+          endTime: 12,
+          content: '플러터 공부하기',
+          date: DateTime.utc(2024, 5, 21),
+          color: categoryColors[0],
+          createdAt: DateTime.now().toUtc()),
+    ]
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -58,14 +88,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding:
                     const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
                 child: ListView(
-                  children: [
-                    ScheduleCard(
-                      startTime: DateTime(2024, 05, 21, 11),
-                      endTime: DateTime(2024, 05, 21, 12),
-                      content: '플러터 공부하기',
-                      color: Colors.blue,
-                    )
-                  ],
+                  children: schedules.containsKey(selectedDay)
+                      ? schedules[selectedDay]!
+                          .map((e) => ScheduleCard(
+                              startTime: e.startTime,
+                              endTime: e.endTime,
+                              content: e.content,
+                              color: Color(int.parse('FF${e.color}', radix: 16))))
+                          .toList()
+                      : [],
                 ),
               ),
             )
