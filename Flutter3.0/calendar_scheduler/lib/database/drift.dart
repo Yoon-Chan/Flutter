@@ -36,6 +36,9 @@ class AppDatabase extends _$AppDatabase {
       // return selectQuery.get();
   }
 
+  //삭제
+  Future<int> removeSchedule(int id) => (delete(scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
+
   @override
   int get schemaVersion => 1;
 }

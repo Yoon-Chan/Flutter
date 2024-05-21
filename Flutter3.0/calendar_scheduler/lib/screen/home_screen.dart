@@ -126,13 +126,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context, index) {
                           // final selectedSchedules = schedules[selectedDay]!;
                           final schedule = selectedSchedules[index];
-                          return ScheduleCard(
-                              startTime: schedule.startTime,
-                              endTime: schedule.endTime,
-                              content: schedule.content,
-                              color: Color(
-                                int.parse('FF${schedule.color}', radix: 16),
-                              ));
+                          return Dismissible(
+                            key: ObjectKey(schedule.id),
+                            direction: DismissDirection.endToStart,
+                            confirmDismiss: (direction) async {
+                                await GetIt.I<AppDatabase>().removeSchedule(schedule.id);
+                                setState(() {});
+                                return true;
+                            },
+                            child: ScheduleCard(
+                                startTime: schedule.startTime,
+                                endTime: schedule.endTime,
+                                content: schedule.content,
+                                color: Color(
+                                  int.parse('FF${schedule.color}', radix: 16),
+                                )),
+                          );
                         },
                         separatorBuilder: (context, index) {
                           return const SizedBox(
