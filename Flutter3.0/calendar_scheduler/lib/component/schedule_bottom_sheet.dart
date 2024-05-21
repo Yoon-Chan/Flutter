@@ -12,7 +12,6 @@ class ScheduleBottomSheet extends StatefulWidget {
 class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   String selectedColor = categoryColors.first;
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,53 +21,103 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         bottom: true,
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0),
-          child: Column(
-            children: [
-              const _Time(),
-              const SizedBox(height: 8.0),
-              const _Content(),
-              const SizedBox(
-                height: 8.0,
-              ),
-              _Category(
-                selectColor: selectedColor,
-                onTap: (String color) {
-                  setState(() {
-                    selectedColor = color;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              const _SaveButton()
-            ],
+          child: Form(
+            key: ,
+            child: Column(
+              children: [
+                _Time(
+                  onEndSaved: onEndTimeSaved,
+                  onEndValidate: onEndTimeValidate,
+                  onStartSave:onStartTimeSaved,
+                  onStartValidate: onStartTimeValidate,
+                ),
+                const SizedBox(height: 8.0),
+                _Content(
+                  onSaved: onContentSaved,
+                  onValidate: onContentValidate,
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                _Category(
+                  selectColor: selectedColor,
+                  onTap: (String color) {
+                    setState(() {
+                      selectedColor = color;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                const _SaveButton()
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  onStartTimeSaved(String? val) {
+
+  }
+
+  String? onStartTimeValidate(String? val) {
+
+  }
+
+  onEndTimeSaved(String? val) {
+
+  }
+
+  String? onEndTimeValidate(String? va){
+
+  }
+
+  onContentSaved(String? val) {
+
+  }
+
+  String? onContentValidate(String? val) {
+
   }
 }
 
 typedef OnColorSelected = void Function(String color);
 
 class _Time extends StatelessWidget {
-  const _Time({super.key});
+  final FormFieldSetter<String> onStartSave;
+  final FormFieldSetter<String> onEndSaved;
+  final FormFieldValidator<String> onStartValidate;
+  final FormFieldValidator<String> onEndValidate;
+
+  const _Time({
+    super.key,
+    required this.onStartSave,
+    required this.onStartValidate,
+    required this.onEndSaved,
+    required this.onEndValidate,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
+    return Row(
       children: [
         Expanded(
             child: CustomTextField(
               label: '시작 시간',
+              onSaved: onStartSave,
+              validator: onStartValidate,
             )),
-        SizedBox(
+        const SizedBox(
           width: 16.0,
         ),
         Expanded(
             child: CustomTextField(
               label: '종료 시간',
+              onSaved: onEndSaved,
+              validator: onEndValidate,
             ))
       ],
     );
@@ -76,14 +125,23 @@ class _Time extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  const _Content({super.key});
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> onValidate;
+
+  const _Content({
+    super.key,
+    required this.onSaved,
+    required this.onValidate,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
+    return Expanded(
       child: CustomTextField(
         label: '내용',
         expand: true,
+        validator: onValidate,
+        onSaved: onSaved,
       ),
     );
   }
@@ -93,11 +151,7 @@ class _Category extends StatelessWidget {
   final String selectColor;
   final OnColorSelected onTap;
 
-  const _Category({
-    super.key,
-    required this.selectColor,
-    required this.onTap
-  });
+  const _Category({super.key, required this.selectColor, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +162,7 @@ class _Category extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   onTap(e);
                 },
                 child: Container(
@@ -117,11 +171,9 @@ class _Category extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Color(int.parse('FF$e', radix: 16)),
                       shape: BoxShape.circle,
-                      border: e == selectColor ? Border.all(
-                          color: Colors.black,
-                          width: 4.0
-                      ) : null
-                  ),
+                      border: e == selectColor
+                          ? Border.all(color: Colors.black, width: 4.0)
+                          : null),
                 ),
               ),
             ),
