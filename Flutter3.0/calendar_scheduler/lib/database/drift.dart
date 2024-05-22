@@ -36,6 +36,16 @@ class AppDatabase extends _$AppDatabase {
       // return selectQuery.get();
   }
 
+  //Stream 형식으로 변화 감지할 때마다 변경하는 기능 구현
+  Stream<List<ScheduleTableData>> getStreamSchedulesOfDay(DateTime date) {
+    //아래 3줄 코드와 같은 방식이다. ..을 이용하여 select()문의 반환값을 가져올 수 있다.
+    return (select(scheduleTable)..where((tbl) => tbl.date.equals(date))).watch();
+
+    // final selectQuery = select(scheduleTable);
+    // selectQuery.where((tbl) => tbl.date.equals(date));
+    // return selectQuery.get();
+  }
+
   //삭제
   Future<int> removeSchedule(int id) => (delete(scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
 
