@@ -21,6 +21,18 @@ void main() async {
   //의존성 주입
   GetIt.I.registerSingleton<AppDatabase>(database);
 
+  final colors = await database.getCategories();
+
+  if(colors.isEmpty) {
+    for(String hexCode in categoryColors) {
+      await database.createCategory(
+        CategoryTableCompanion(
+          color: Value(hexCode)
+        )
+      );
+    }
+  }
+
   // //데이터 넣기
   // await database.createSchedule(
   //   ScheduleTableCompanion(

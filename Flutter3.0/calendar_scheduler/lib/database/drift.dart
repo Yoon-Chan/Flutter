@@ -1,6 +1,8 @@
 import 'dart:io';
 
 //p로 사용하기 위해 적용
+import 'package:calendar_scheduler/model/category.dart';
+import 'package:calendar_scheduler/model/schedule_with_category.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 
@@ -15,13 +17,32 @@ import 'package:sqlite3/sqlite3.dart';
 part 'drift.g.dart';
 
 // dart run build_runner build  명령어를 실행하면 코드가 자동으로 생성된다.
-@DriftDatabase(tables: [ScheduleTable])
+@DriftDatabase(tables: [ScheduleTable, CategoryTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
+  Future<int> createCategory(CategoryTableCompanion data) =>
+      into(categoryTable).insert(data);
+
+  //카테고리 정보
+  Future<List<CategoryTableData>> getCategories() =>
+      select(categoryTable).get();
+
   //id schedule 가져오기
-  Future<ScheduleTableData> getScheduleById(int id) =>
-      (select(scheduleTable)..where((tbl) => tbl.id.equals(id))).getSingle();
+  Future<ScheduleWithCategory> getScheduleById(int id) {
+    // (select(scheduleTable)..where((tbl) => tbl.id.equals(id))).getSingle();
+    final query = select(scheduleTable).join([
+      innerJoin(
+          categoryTable, categoryTable.id.equalsExp(scheduleTable.colorId)),
+    ])
+      ..where(scheduleTable.id.equals(id));
+
+    return query.map((row) {
+      final schedule = row.readTable(scheduleTable);
+      final category = row.readTable(categoryTable);
+      return ScheduleWithCategory(category: category, schedule: schedule);
+    }).getSingle();
+  }
 
   //update
   Future<int> updateScheduleById(int id, ScheduleTableCompanion data) =>
@@ -53,10 +74,22 @@ class AppDatabase extends _$AppDatabase {
   }
 
   //Stream 형식으로 변화 감지할 때마다 변경하는 기능 구현
-  Stream<List<ScheduleTableData>> getStreamSchedulesOfDay(DateTime date) {
+  Stream<List<ScheduleWithCategory>> getStreamSchedulesOfDay(DateTime date) {
+    final query = select(scheduleTable).join([
+      innerJoin(
+          categoryTable, categoryTable.id.equalsExp(scheduleTable.colorId)),
+    ])
+      ..where(scheduleTable.date.equals(date));
+
+    return query.map((row) {
+      final schedule = row.readTable(scheduleTable);
+      final category = row.readTable(categoryTable);
+      return ScheduleWithCategory(category: category, schedule: schedule);
+    }).watch();
+
     //아래 3줄 코드와 같은 방식이다. ..을 이용하여 select()문의 반환값을 가져올 수 있다.
-    return (select(scheduleTable)..where((tbl) => tbl.date.equals(date)))
-        .watch();
+    // return (select(scheduleTable)..where((tbl) => tbl.date.equals(date)))
+    //     .watch();
 
     // final selectQuery = select(scheduleTable);
     // selectQuery.where((tbl) => tbl.date.equals(date));

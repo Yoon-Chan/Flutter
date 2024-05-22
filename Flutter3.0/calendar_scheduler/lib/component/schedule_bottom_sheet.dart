@@ -23,7 +23,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   int? endTime;
   String? content;
 
-  String selectedColor = categoryColors.first;
+  int selectedColorId = 0;
   final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
@@ -35,7 +35,12 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   iniColor() async {
     if (widget.id != null) {
       final resp = await GetIt.I<AppDatabase>().getScheduleById(widget.id!);
-      selectedColor = resp.color;
+      selectedColorId = resp.category.id;
+    }else {
+      final resp = await GetIt.I<AppDatabase>().getCategories();
+      setState(() {
+        selectedColorId = resp.first.id;
+      });
     }
   }
 
@@ -52,7 +57,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final data = snapshot.data;
+          final data = snapshot.data?.schedule;
 
           return Container(
             color: Colors.white,
@@ -84,10 +89,10 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                         height: 8.0,
                       ),
                       _Category(
-                        selectColor: selectedColor,
-                        onTap: (String color) {
+                        selectColorId: selectedColorId,
+                        onTap: (int colorId) {
                           setState(() {
-                            selectedColor = color;
+                            selectedColorId = colorId;
                           });
                         },
                       ),
@@ -163,7 +168,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
           startTime: Value(startTime!),
           endTime: Value(endTime!),
           content: Value(content!),
-          color: Value(selectedColor),
+          colorId: Value(selectedColorId),
           date: Value(widget.selectedDay),
         ));
       } else {
@@ -173,7 +178,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
             startTime: Value(startTime!),
             endTime: Value(endTime!),
             content: Value(content!),
-            color: Value(selectedColor),
+            colorId: Value(selectedColorId),
             date: Value(widget.selectedDay),
           ),
         );
@@ -198,7 +203,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   }
 }
 
-typedef OnColorSelected = void Function(String color);
+typedef OnColorSelected = void Function(int color);
 
 class _Time extends StatelessWidget {
   final FormFieldSetter<String> onStartSave;
@@ -271,36 +276,45 @@ class _Content extends StatelessWidget {
 }
 
 class _Category extends StatelessWidget {
-  final String selectColor;
+  final int selectColorId;
   final OnColorSelected onTap;
 
-  const _Category({super.key, required this.selectColor, required this.onTap});
+  const _Category({super.key, required this.selectColorId, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: categoryColors
-          .map(
-            (e) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  onTap(e);
-                },
-                child: Container(
-                  width: 32.0,
-                  height: 32.0,
-                  decoration: BoxDecoration(
-                      color: Color(int.parse('FF$e', radix: 16)),
-                      shape: BoxShape.circle,
-                      border: e == selectColor
-                          ? Border.all(color: Colors.black, width: 4.0)
-                          : null),
+    return FutureBuilder(
+      future: GetIt.I<AppDatabase>().getCategories(),
+      builder: (context, snapshot) {
+        if(!snapshot.hasData) {
+          return Container();
+        }
+
+        return Row(
+          children: snapshot.data!
+              .map(
+                (e) => Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      onTap(e.id);
+                    },
+                    child: Container(
+                      width: 32.0,
+                      height: 32.0,
+                      decoration: BoxDecoration(
+                          color: Color(int.parse('FF${e.color}', radix: 16)),
+                          shape: BoxShape.circle,
+                          border: e.id == selectColorId
+                              ? Border.all(color: Colors.black, width: 4.0)
+                              : null),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )
-          .toList(),
+              )
+              .toList(),
+        );
+      }
     );
   }
 }

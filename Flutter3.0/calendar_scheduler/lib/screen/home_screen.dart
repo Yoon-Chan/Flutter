@@ -6,6 +6,7 @@ import 'package:calendar_scheduler/component/today_banner.dart';
 import 'package:calendar_scheduler/const/color.dart';
 import 'package:calendar_scheduler/database/drift.dart';
 import 'package:calendar_scheduler/model/schedule.dart';
+import 'package:calendar_scheduler/model/schedule_with_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding:
                     const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
-                child: StreamBuilder<List<ScheduleTableData>>(
+                child: StreamBuilder<List<ScheduleWithCategory>>(
                     stream: GetIt.I<AppDatabase>()
                         .getStreamSchedulesOfDay(selectedDay),
                     builder: (context, snapshot) {
@@ -125,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           // final selectedSchedules = schedules[selectedDay]!;
                           final schedule = selectedSchedules[index];
                           return Dismissible(
-                            key: ObjectKey(schedule.id),
+                            key: ObjectKey(schedule.schedule.id),
                             direction: DismissDirection.endToStart,
                             // confirmDismiss: (direction) async {
                             //     await GetIt.I<AppDatabase>().removeSchedule(schedule.id);
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             // },
                             onDismissed: (direction) {
                               GetIt.I<AppDatabase>()
-                                  .removeSchedule(schedule.id);
+                                  .removeSchedule(schedule.schedule.id);
                             },
                             child: GestureDetector(
                               onTap: () {
@@ -143,16 +144,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     builder: (context) {
                                       return ScheduleBottomSheet(
                                         selectedDay: selectedDay,
-                                        id: schedule.id,
+                                        id: schedule.schedule.id,
                                       );
                                     });
                               },
                               child: ScheduleCard(
-                                  startTime: schedule.startTime,
-                                  endTime: schedule.endTime,
-                                  content: schedule.content,
+                                  startTime: schedule.schedule.startTime,
+                                  endTime: schedule.schedule.endTime,
+                                  content: schedule.schedule.content,
                                   color: Color(
-                                    int.parse('FF${schedule.color}', radix: 16),
+                                    int.parse('FF${schedule.category.color}', radix: 16),
                                   )),
                             ),
                           );
