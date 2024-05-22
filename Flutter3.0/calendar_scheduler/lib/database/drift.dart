@@ -1,8 +1,8 @@
 import 'dart:io';
+
 //p로 사용하기 위해 적용
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
-
 
 import 'package:calendar_scheduler/model/schedule.dart';
 import 'package:drift/drift.dart';
@@ -13,10 +13,9 @@ import 'package:sqlite3/sqlite3.dart';
 
 //코드 제너레이션
 part 'drift.g.dart';
+
 // dart run build_runner build  명령어를 실행하면 코드가 자동으로 생성된다.
-@DriftDatabase(
-  tables: [ScheduleTable]
-)
+@DriftDatabase(tables: [ScheduleTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -24,22 +23,32 @@ class AppDatabase extends _$AppDatabase {
 
   //반환값은 생성한 값의 id 값 -> 주로 int
   //파라미터 - 업데이트나 생성할 때 Companion 사용
-  Future<int> createSchedule(ScheduleTableCompanion data) => into(scheduleTable).insert(data);
+  Future<int> createSchedule(ScheduleTableCompanion data) =>
+      into(scheduleTable).insert(data);
 
   //특정 날짜의 일정들을 가져오는 방법
   Future<List<ScheduleTableData>> getSchedulesOfDay(DateTime date) {
     //아래 3줄 코드와 같은 방식이다. ..을 이용하여 select()문의 반환값을 가져올 수 있다.
-    return (select(scheduleTable)..where((tbl) => tbl.date.equals(date))).get();
+    return (select(scheduleTable)
+          ..where((tbl) => tbl.date.equals(date))
+          ..orderBy([
+            (tbl) =>
+                OrderingTerm(expression: tbl.startTime, mode: OrderingMode.asc),
+            (tbl) =>
+                OrderingTerm(expression: tbl.endTime, mode: OrderingMode.asc),
+          ]))
+        .get();
 
-      // final selectQuery = select(scheduleTable);
-      // selectQuery.where((tbl) => tbl.date.equals(date));
-      // return selectQuery.get();
+    // final selectQuery = select(scheduleTable);
+    // selectQuery.where((tbl) => tbl.date.equals(date));
+    // return selectQuery.get();
   }
 
   //Stream 형식으로 변화 감지할 때마다 변경하는 기능 구현
   Stream<List<ScheduleTableData>> getStreamSchedulesOfDay(DateTime date) {
     //아래 3줄 코드와 같은 방식이다. ..을 이용하여 select()문의 반환값을 가져올 수 있다.
-    return (select(scheduleTable)..where((tbl) => tbl.date.equals(date))).watch();
+    return (select(scheduleTable)..where((tbl) => tbl.date.equals(date)))
+        .watch();
 
     // final selectQuery = select(scheduleTable);
     // selectQuery.where((tbl) => tbl.date.equals(date));
@@ -47,15 +56,15 @@ class AppDatabase extends _$AppDatabase {
   }
 
   //삭제
-  Future<int> removeSchedule(int id) => (delete(scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
+  Future<int> removeSchedule(int id) =>
+      (delete(scheduleTable)..where((tbl) => tbl.id.equals(id))).go();
 
   @override
   int get schemaVersion => 1;
 }
 
-
 LazyDatabase _openConnection() {
-  return LazyDatabase(() async{
+  return LazyDatabase(() async {
     //앱을 설치를 하면 앱 별로 생성되는 폴더의 위치를 가져오는 함수 -> getApplicationDocumentsDirectory()
     final dbFolder = await getApplicationDocumentsDirectory();
     //dart:io에서 가져와야 한다.
@@ -63,7 +72,7 @@ LazyDatabase _openConnection() {
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
 
     //안드로이드인 경우
-    if(Platform.isAndroid) {
+    if (Platform.isAndroid) {
       //예전 안드로이드 버그를 해결해주는 코드
       await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
     }
