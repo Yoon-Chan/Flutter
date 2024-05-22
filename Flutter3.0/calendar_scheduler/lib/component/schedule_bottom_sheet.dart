@@ -9,11 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class ScheduleBottomSheet extends StatefulWidget {
+  final int? id;
   final DateTime selectedDay;
-  const ScheduleBottomSheet({
-    required this.selectedDay,
-    super.key
-  });
+
+  const ScheduleBottomSheet({required this.selectedDay, this.id, super.key});
 
   @override
   State<ScheduleBottomSheet> createState() => _ScheduleBottomSheetState();
@@ -28,52 +27,83 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   final GlobalKey<FormState> formKey = GlobalKey();
 
   @override
+  void initState() {
+    super.initState();
+    iniColor();
+  }
+
+  iniColor() async {
+    if (widget.id != null) {
+      final resp = await GetIt.I<AppDatabase>().getScheduleById(widget.id!);
+      selectedColor = resp.color;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      height: 400,
-      child: SafeArea(
-        bottom: true,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                _Time(
-                  onEndSaved: onEndTimeSaved,
-                  onEndValidate: onEndTimeValidate,
-                  onStartSave: onStartTimeSaved,
-                  onStartValidate: onStartTimeValidate,
+    return FutureBuilder(
+        future: widget.id == null
+            ? null
+            : GetIt.I<AppDatabase>().getScheduleById(widget.id!),
+        builder: (context, snapshot) {
+          if (widget.id != null &&
+              snapshot.connectionState == ConnectionState.waiting &&
+              !snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final data = snapshot.data;
+
+          return Container(
+            color: Colors.white,
+            height: 400,
+            child: SafeArea(
+              bottom: true,
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, top: 16.0, right: 8.0),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      _Time(
+                        onEndSaved: onEndTimeSaved,
+                        onEndValidate: onEndTimeValidate,
+                        onStartSave: onStartTimeSaved,
+                        onStartValidate: onStartTimeValidate,
+                        startTimeInitValue: data?.startTime.toString(),
+                        endTimeInitValue: data?.endTime.toString(),
+                      ),
+                      const SizedBox(height: 8.0),
+                      _Content(
+                        onSaved: onContentSaved,
+                        onValidate: onContentValidate,
+                        contentInitValue: data?.content.toString(),
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      _Category(
+                        selectColor: selectedColor,
+                        onTap: (String color) {
+                          setState(() {
+                            selectedColor = color;
+                          });
+                        },
+                      ),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      _SaveButton(
+                        onPressed: onSavePressed,
+                      )
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8.0),
-                _Content(
-                  onSaved: onContentSaved,
-                  onValidate: onContentValidate,
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                _Category(
-                  selectColor: selectedColor,
-                  onTap: (String color) {
-                    setState(() {
-                      selectedColor = color;
-                    });
-                  },
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                _SaveButton(
-                  onPressed: onSavePressed,
-                )
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
   onStartTimeSaved(String? val) {
@@ -84,12 +114,12 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   String? onStartTimeValidate(String? val) {
     if (val == null) return '값을 입력해 주세요!!';
 
-    if(int.tryParse(val) == null) {
+    if (int.tryParse(val) == null) {
       return '숫자를 입력해 주세요!!';
     }
     final time = int.parse(val);
 
-    if(time < 0 || time > 24) return '시간 범위가 맞지 않습니다!!';
+    if (time < 0 || time > 24) return '시간 범위가 맞지 않습니다!!';
     return null;
   }
 
@@ -101,11 +131,11 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   String? onEndTimeValidate(String? val) {
     if (val == null) return '값을 입력해 주세요!!';
 
-    if(int.tryParse(val) == null) {
+    if (int.tryParse(val) == null) {
       return '숫자를 입력해 주세요!!';
     }
     final time = int.parse(val);
-    if(time < 0 || time > 24) return '시간 범위가 맞지 않습니다!!';
+    if (time < 0 || time > 24) return '시간 범위가 맞지 않습니다!!';
     return null;
   }
 
@@ -116,27 +146,38 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   String? onContentValidate(String? val) {
     if (val == null) return '내용을 입력해 주세요!!';
-    if( val.length < 5) return '5자 이상을 입력해 주세요';
+    if (val.length < 5) return '5자 이상을 입력해 주세요';
     return null;
   }
 
   onSavePressed() async {
     final isValid = formKey.currentState!.validate();
-    if(isValid){
+    if (isValid) {
       formKey.currentState!.save();
 
       //DI 가져오기
       final database = GetIt.I<AppDatabase>();
 
-      await database.createSchedule(
-        ScheduleTableCompanion(
+      if (widget.id == null) {
+        await database.createSchedule(ScheduleTableCompanion(
           startTime: Value(startTime!),
           endTime: Value(endTime!),
           content: Value(content!),
           color: Value(selectedColor),
           date: Value(widget.selectedDay),
-        )
-      );
+        ));
+      } else {
+        await database.updateScheduleById(
+          widget.id!,
+          ScheduleTableCompanion(
+            startTime: Value(startTime!),
+            endTime: Value(endTime!),
+            content: Value(content!),
+            color: Value(selectedColor),
+            date: Value(widget.selectedDay),
+          ),
+        );
+      }
 
       Navigator.of(context).pop();
 
@@ -164,6 +205,8 @@ class _Time extends StatelessWidget {
   final FormFieldSetter<String> onEndSaved;
   final FormFieldValidator<String> onStartValidate;
   final FormFieldValidator<String> onEndValidate;
+  final String? startTimeInitValue;
+  final String? endTimeInitValue;
 
   const _Time({
     super.key,
@@ -171,6 +214,8 @@ class _Time extends StatelessWidget {
     required this.onStartValidate,
     required this.onEndSaved,
     required this.onEndValidate,
+    required this.startTimeInitValue,
+    required this.endTimeInitValue,
   });
 
   @override
@@ -182,6 +227,7 @@ class _Time extends StatelessWidget {
           label: '시작 시간',
           onSaved: onStartSave,
           validator: onStartValidate,
+          initialValue: startTimeInitValue,
         )),
         const SizedBox(
           width: 16.0,
@@ -191,6 +237,7 @@ class _Time extends StatelessWidget {
           label: '종료 시간',
           onSaved: onEndSaved,
           validator: onEndValidate,
+          initialValue: endTimeInitValue,
         ))
       ],
     );
@@ -200,11 +247,13 @@ class _Time extends StatelessWidget {
 class _Content extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> onValidate;
+  final String? contentInitValue;
 
   const _Content({
     super.key,
     required this.onSaved,
     required this.onValidate,
+    required this.contentInitValue,
   });
 
   @override
@@ -215,6 +264,7 @@ class _Content extends StatelessWidget {
         expand: true,
         validator: onValidate,
         onSaved: onSaved,
+        initialValue: contentInitValue,
       ),
     );
   }

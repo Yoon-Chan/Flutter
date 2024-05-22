@@ -19,6 +19,14 @@ part 'drift.g.dart';
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
+  //id schedule 가져오기
+  Future<ScheduleTableData> getScheduleById(int id) =>
+      (select(scheduleTable)..where((tbl) => tbl.id.equals(id))).getSingle();
+
+  //update
+  Future<int> updateScheduleById(int id, ScheduleTableCompanion data) =>
+      (update(scheduleTable)..where((tbl) => tbl.id.equals(id))).write(data);
+
   Future<List<ScheduleTableData>> getSchedules() => select(scheduleTable).get();
 
   //반환값은 생성한 값의 id 값 -> 주로 int

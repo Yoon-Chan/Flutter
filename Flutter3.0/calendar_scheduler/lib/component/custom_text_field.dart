@@ -6,12 +6,15 @@ class CustomTextField extends StatelessWidget {
   final bool expand;
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String>? validator;
+  final String? initialValue;
+
 
   const CustomTextField({
     super.key,
     required this.label,
     required this.onSaved,
     required this.validator,
+    this.initialValue,
     this.expand = false,
   });
 
@@ -47,6 +50,7 @@ class CustomTextField extends StatelessWidget {
       minLines: expand ? null : 1,
       expands: expand,
       cursorColor: Colors.grey,
+      initialValue: initialValue,
     );
   }
 }

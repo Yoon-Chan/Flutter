@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
-        onPressed: ()  {
+        onPressed: () {
           showModalBottomSheet<ScheduleTable>(
               context: context,
               builder: (context) {
@@ -99,7 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding:
                     const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
                 child: StreamBuilder<List<ScheduleTableData>>(
-                    stream: GetIt.I<AppDatabase>().getStreamSchedulesOfDay(selectedDay),
+                    stream: GetIt.I<AppDatabase>()
+                        .getStreamSchedulesOfDay(selectedDay),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(
@@ -107,14 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }
 
-                      if (snapshot.data == null ) {
+                      if (snapshot.data == null) {
                         return const Center(
                           child: CircularProgressIndicator(),
                         );
                       }
 
                       final selectedSchedules = snapshot.data!;
-
 
                       return ListView.separated(
                         // itemCount: schedules.containsKey(selectedDay)
@@ -133,15 +133,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             //     return true;
                             // },
                             onDismissed: (direction) {
-                              GetIt.I<AppDatabase>().removeSchedule(schedule.id);
+                              GetIt.I<AppDatabase>()
+                                  .removeSchedule(schedule.id);
                             },
-                            child: ScheduleCard(
-                                startTime: schedule.startTime,
-                                endTime: schedule.endTime,
-                                content: schedule.content,
-                                color: Color(
-                                  int.parse('FF${schedule.color}', radix: 16),
-                                )),
+                            child: GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet<ScheduleTable>(
+                                    context: context,
+                                    builder: (context) {
+                                      return ScheduleBottomSheet(
+                                        selectedDay: selectedDay,
+                                        id: schedule.id,
+                                      );
+                                    });
+                              },
+                              child: ScheduleCard(
+                                  startTime: schedule.startTime,
+                                  endTime: schedule.endTime,
+                                  content: schedule.content,
+                                  color: Color(
+                                    int.parse('FF${schedule.color}', radix: 16),
+                                  )),
+                            ),
                           );
                         },
                         separatorBuilder: (context, index) {
